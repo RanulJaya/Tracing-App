@@ -15,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
 
     //bluetooth adapter
-    lateinit var bAdapter:BluetoothAdapter
-    private val REQUEST_CODE_ENABLE_BT:Int =1
+    lateinit var bAdapter: BluetoothAdapter
+    private val REQUEST_CODE_ENABLE_BT: Int = 1
     private var lstvw: ListView? = null
     private var aAdapter: ArrayAdapter<*>? = null
 
@@ -32,42 +32,38 @@ class MainActivity : AppCompatActivity() {
         bAdapter = BluetoothAdapter.getDefaultAdapter()
 
 
-        if(bAdapter == null){
+
+        if (bAdapter.isEnabled) {
+            textOn.text = "Bluetooth is Found"
+        } else {
             textOn.text = "Bluetooth is not Found"
         }
-        else{
-            textOn.text = "Bluetooth is Found"
-        }
+
+        turnOnButton.setOnClickListener {
 
 
-        turnOnButton.setOnClickListener(){
-
-
-            if(bAdapter.isEnabled){
+            if (bAdapter.isEnabled) {
                 Toast.makeText(this, "Already on", Toast.LENGTH_LONG).show()
-            }
-
-            else{
+            } else {
                 var intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                 startActivityForResult(intent, REQUEST_CODE_ENABLE_BT)
+                textOn.text = "Bluetooth is Found"
             }
         }
 
         turnOffButton.setOnClickListener()
         {
-            if(!bAdapter.isEnabled){
+            if (!bAdapter.isEnabled) {
                 Toast.makeText(this, "Already off", Toast.LENGTH_LONG).show()
-            }
-
-            else{
+            } else {
                 bAdapter.disable()
                 Toast.makeText(this, "Bluetooth is off", Toast.LENGTH_LONG).show()
+
+                textOn.text = "Bluetooth is not Found"
             }
         }
 
         btn.setOnClickListener {
-
-
             if (bAdapter == null) {
                 Toast.makeText(
                     applicationContext,
@@ -93,13 +89,12 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     lstvw = findViewById<View>(R.id.deviceList) as ListView
+
                     aAdapter =
                         ArrayAdapter(applicationContext, android.R.layout.simple_list_item_1, list)
-                    lstvw!!.setAdapter(aAdapter)
+                    lstvw!!.adapter = aAdapter
                 }
             }
         }
-
     }
-
 }
