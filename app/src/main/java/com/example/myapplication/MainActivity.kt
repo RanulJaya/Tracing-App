@@ -1,15 +1,21 @@
 package com.example.myapplication
 
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.telephony.TelephonyManager
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import java.time.LocalDate
+import java.time.LocalTime
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private var lstvw: ListView? = null
     private var aAdapter: ArrayAdapter<*>? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,16 +35,40 @@ class MainActivity : AppCompatActivity() {
         val turnOnButton: TextView = findViewById(R.id.onBtn)
         val turnOffButton: TextView = findViewById(R.id.offBtn)
         val btn: TextView = findViewById(R.id.pairedBtn)
+        val connectBtn: TextView = findViewById(R.id.conenctbtn)
 
         bAdapter = BluetoothAdapter.getDefaultAdapter()
-
-
+        //TODO:Create the realm intialisation for the app to run the backend
 
         if (bAdapter.isEnabled) {
             textOn.text = "Bluetooth is Found"
         } else {
             textOn.text = "Bluetooth is not Found"
         }
+
+        connectBtn.setOnClickListener(){
+
+            if(bAdapter.isEnabled) {
+                val date = LocalDate.now()
+                val time = LocalTime.now()
+                val location = LOCATION_SERVICE
+                val phone = PhoneData(date, time, 6, location, "02178324") //Dummy Data
+
+                if(phone.UserInformation(phone)){
+                    Toast.makeText(this, phone.component(), Toast.LENGTH_LONG).show()
+                }
+                else{
+                    Toast.makeText(this, "Information did not successfully send to the database", Toast.LENGTH_LONG).show()
+                }
+
+            }
+            else{
+                Toast.makeText(this, "Bluetooth is not On", Toast.LENGTH_LONG).show()
+
+            }
+        }
+
+
 
         turnOnButton.setOnClickListener {
 
@@ -62,12 +93,11 @@ class MainActivity : AppCompatActivity() {
                 textOn.text = "Bluetooth is not Found"
             }
         }
-
         btn.setOnClickListener {
-            if (bAdapter == null) {
+            if (!(bAdapter.isEnabled)) {
                 Toast.makeText(
                     applicationContext,
-                    "Bluetooth Not Supported",
+                    "Bluetooth is not On",
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
