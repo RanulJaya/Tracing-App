@@ -1,12 +1,9 @@
 package com.example.myapplication
 
 import android.bluetooth.BluetoothAdapter
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.telephony.TelephonyManager
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -26,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private var lstvw: ListView? = null
     private var aAdapter: ArrayAdapter<*>? = null
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         val connectBtn: TextView = findViewById(R.id.conenctbtn)
 
         bAdapter = BluetoothAdapter.getDefaultAdapter()
-        //TODO:Create the realm intialisation for the app to run the backend
 
         if (bAdapter.isEnabled) {
             textOn.text = "Bluetooth is Found"
