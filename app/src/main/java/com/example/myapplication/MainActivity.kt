@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         val btn: TextView = findViewById(R.id.pairedBtn)
         val connectBtn: TextView = findViewById(R.id.conenctbtn)
 
-        val BASE_URL:String = "http://192.168.1.73:8001"
+        val BASE_URL:String = "https://host-backend.herokuapp.com"
         var phoneUser:List<PhoneData>  ?= null
 
         bAdapter = BluetoothAdapter.getDefaultAdapter()
@@ -62,10 +62,16 @@ class MainActivity : AppCompatActivity() {
                 val location = LOCATION_SERVICE
                  //Dummy Data
 
-                val call: Call<PhoneData> = service.getUserBluetooth()
+                val map: HashMap<String, String> = HashMap()
 
-                call.enqueue(object : Callback<PhoneData>{
-                    override fun onResponse(response: Response<PhoneData>) {
+                map["email"] = "Hello"
+                map["password"] = "World"
+
+                val call: Call<Void> = service.newUser(map)
+
+                //TODO:gson needs to convert to json
+                call.enqueue(object : Callback<Void>{
+                    override fun onResponse(response: Response<Void>) {
                         if (response.code() == 200) {
                             Toast.makeText(this@MainActivity, "This is working", Toast.LENGTH_LONG).show()
                         }
