@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bluetooth = require('../model/bluetooth') 
 
-router.post('/post', (req, res) => {
+router.post('/post', async(req, res) => {
 
     const name = req.body.name
     const test = req.body.test
@@ -17,7 +17,6 @@ router.post('/post', (req, res) => {
     
 });
 
-//FIXME: 
 router.get('/test', (req, res) => {
     console.log("test")
     res.json("Test")

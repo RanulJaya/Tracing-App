@@ -1,28 +1,37 @@
 //express and router intitalisation
+require('dotenv').config()
 var express = require('express')
-
 var app = express()
-app.use(express.json())
+var mongoose = require('mongoose')
 
-const router = require('./router/api')
 
 //intialising the port
 const log = console.log
 const PORT = process.env.PORT || 8001
 
 
-//TODO:middleware
+//connect to mongodb
+mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost/my_database', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true 
+});
 
+//middleware
+app.use(express.json())
+app.use(express.urlencoded())
+const router = require('./router/api')
 
-//TODO: connect to mongodb
+//production env
+if (process.env.NODE_ENV === 'production') {
+    app.get('/', (req, res) => {
+        res.send("Back end running")
+    });
+}
 
-
-//TODO:production env
-
-
-//TODO:routes
+//routes
 app.use('/api', router)
 
+//listening to port
 app.listen(PORT, () => {
     log(`Server is starting at PORT: ${PORT}`)
 })
