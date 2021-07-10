@@ -22,4 +22,10 @@ router.get('/test', (req, res) => {
     res.json("Test")
 })
 
+router.get('/', (req, res) => {
+    bluetooth.find()
+    .then(Bluetooth => res.json(Bluetooth))
+    .catch(err => res.status(404).json({ noBluetoothFound: 'No Bluetooth found' }));
+})
+
 module.exports = router
