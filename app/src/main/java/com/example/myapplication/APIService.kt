@@ -8,9 +8,11 @@ import retrofit.http.POST
 
 public interface APIService {
 
-
     @GET("/api/test")
-    open fun createUser(): Call<PhoneData>
+    open fun getUserBluetooth(): Call<PhoneData>
+
+    @POST("/api/post")
+    open fun newUser(@Body map:HashMap<String, String>): Call<Void>
 
 }
 

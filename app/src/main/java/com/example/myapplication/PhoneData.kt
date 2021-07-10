@@ -6,5 +6,7 @@ class PhoneData {
 
     var location:LocalTime ?= null
 
-    constructor()
+    constructor(){
+
+    }
 }

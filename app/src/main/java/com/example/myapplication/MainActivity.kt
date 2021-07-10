@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import retrofit.*
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,14 +40,13 @@ class MainActivity : AppCompatActivity() {
 
         val BASE_URL:String = "http://192.168.1.73:8001"
         var phoneUser:List<PhoneData>  ?= null
-        var service:APIService ?= null
 
         bAdapter = BluetoothAdapter.getDefaultAdapter()
 
-        var retrofit = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).
+        var retrofit:Retrofit = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).
         baseUrl(BASE_URL).build()
-        service = retrofit.create(APIService::class.java)
 
+        val service:APIService = retrofit.create(APIService::class.java)
 
         if (bAdapter.isEnabled) {
             textOn.text = "Bluetooth is Found"
@@ -61,22 +62,24 @@ class MainActivity : AppCompatActivity() {
                 val location = LOCATION_SERVICE
                  //Dummy Data
 
-                val call: Call<PhoneData> = service.createUser()
+                val call: Call<PhoneData> = service.getUserBluetooth()
 
                 call.enqueue(object : Callback<PhoneData>{
                     override fun onResponse(response: Response<PhoneData>) {
                         if (response.code() == 200) {
-                            val result: PhoneData = response.body()
+                            Toast.makeText(this@MainActivity, "This is working", Toast.LENGTH_LONG).show()
+                        }
+                        else{
+                            Toast.makeText(this@MainActivity, "Not connected", Toast.LENGTH_LONG).show()
                         }
                     }
 
-                    override fun onFailure(t: Throwable?) {
+                    override fun onFailure(t: Throwable) {
+                        Toast.makeText(this@MainActivity,
+                           t.message, Toast.LENGTH_LONG).show()
 
                     }
-
                 })
-
-
             }
             else{
                 Toast.makeText(this, "Bluetooth is not On", Toast.LENGTH_LONG).show()
