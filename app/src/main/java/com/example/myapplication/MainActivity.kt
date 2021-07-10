@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import retrofit.*
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -35,7 +36,16 @@ class MainActivity : AppCompatActivity() {
         val btn: TextView = findViewById(R.id.pairedBtn)
         val connectBtn: TextView = findViewById(R.id.conenctbtn)
 
+        val BASE_URL:String = "http://192.168.1.73:8001"
+        var phoneUser:List<PhoneData>  ?= null
+        var service:APIService ?= null
+
         bAdapter = BluetoothAdapter.getDefaultAdapter()
+
+        var retrofit = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).
+        baseUrl(BASE_URL).build()
+        service = retrofit.create(APIService::class.java)
+
 
         if (bAdapter.isEnabled) {
             textOn.text = "Bluetooth is Found"
@@ -49,14 +59,23 @@ class MainActivity : AppCompatActivity() {
                 val date = LocalDate.now()
                 val time = LocalTime.now()
                 val location = LOCATION_SERVICE
-                val phone = PhoneData(date, time, 6, location, "02178324") //Dummy Data
+                 //Dummy Data
 
-                if(phone.UserInformation(phone)){
-                    Toast.makeText(this, phone.component(), Toast.LENGTH_LONG).show()
-                }
-                else{
-                    Toast.makeText(this, "Information did not successfully send to the database", Toast.LENGTH_LONG).show()
-                }
+                val call: Call<PhoneData> = service.createUser()
+
+                call.enqueue(object : Callback<PhoneData>{
+                    override fun onResponse(response: Response<PhoneData>) {
+                        if (response.code() == 200) {
+                            val result: PhoneData = response.body()
+                        }
+                    }
+
+                    override fun onFailure(t: Throwable?) {
+
+                    }
+
+                })
+
 
             }
             else{

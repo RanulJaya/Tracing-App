@@ -8,9 +8,9 @@ import retrofit.http.POST
 
 public interface APIService {
 
-    //TODO:Needs to be further tested
-    @POST("/api/postdata")
-    open fun createUser(@Body user: PhoneData?): Call<PhoneData?>?
+
+    @GET("/api/test")
+    open fun createUser(): Call<PhoneData>
 
 }
 

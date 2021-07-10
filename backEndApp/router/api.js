@@ -11,7 +11,8 @@ router.post('/postdata', (req, res) => {
 });
 
 router.get('/test', (req, res) => {
-    res.json("Hello World")
+    console.log("test")
+    res.json("Hello")
 })
 
 module.exports = router
