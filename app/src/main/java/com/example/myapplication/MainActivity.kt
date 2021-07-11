@@ -11,7 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import retrofit.*
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
@@ -38,15 +39,17 @@ class MainActivity : AppCompatActivity() {
         val btn: TextView = findViewById(R.id.pairedBtn)
         val connectBtn: TextView = findViewById(R.id.conenctbtn)
 
-        val BASE_URL:String = "https://host-backend.herokuapp.com"
+        val BASE_URL:String = "https://host-backend.herokuapp.com/"
         var phoneUser:List<PhoneData>  ?= null
 
         bAdapter = BluetoothAdapter.getDefaultAdapter()
 
-        var retrofit:Retrofit = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).
-        baseUrl(BASE_URL).build()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
-        val service:APIService = retrofit.create(APIService::class.java)
+        val service = retrofit.create(APIService::class.java)
 
         if (bAdapter.isEnabled) {
             textOn.text = "Bluetooth is Found"
@@ -64,29 +67,27 @@ class MainActivity : AppCompatActivity() {
 
                 val map: HashMap<String, String> = HashMap()
 
-                map["email"] = "Hello"
-                map["password"] = "World"
+                map["name"]= "Hello"
+                map["test"] = "Goodbye"
 
-                val call: Call<Void> = service.newUser(map)
+                val call = service.newUser(map)
 
                 //TODO:gson needs to convert to json
                 call.enqueue(object : Callback<Void>{
-                    override fun onResponse(response: Response<Void>) {
-                        if (response.code() == 200) {
-                            Toast.makeText(this@MainActivity, "This is working", Toast.LENGTH_LONG).show()
+                    override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
+                        if(response?.code() ==200){
+                            Toast.makeText(this@MainActivity, "this works", Toast.LENGTH_LONG).show()
                         }
-                        else{
-                            Toast.makeText(this@MainActivity, "Not connected", Toast.LENGTH_LONG).show()
-                        }
-                    }
-
-                    override fun onFailure(t: Throwable) {
-                        Toast.makeText(this@MainActivity,
-                           t.message, Toast.LENGTH_LONG).show()
 
                     }
+
+                    override fun onFailure(call: Call<Void>?, t: Throwable?) {
+                        Toast.makeText(this@MainActivity, t?.message, Toast.LENGTH_LONG).show()
+                    }
+
                 })
             }
+
             else{
                 Toast.makeText(this, "Bluetooth is not On", Toast.LENGTH_LONG).show()
 
