@@ -1,0 +1,15 @@
+<resources>
+    <string name="new_app_name">App Tracer</string>
+    <string name="view">View</string>
+    <string name="activityView">activity</string>
+    <string name="button">Turn On</string>
+    <string name="button1">Turn Off</string>
+    <string name="button2">Fragment</string>
+    <string name="test">Connect</string>
+    <string name="close">Close</string>
+    <string name="id">ID</string>
+    <string name="window">Window</string>
+    <string name="setOk">OK</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="settingPage">Settings</string>
+</resources>
