@@ -9,5 +9,3 @@ A Covid Tracer App which connects with other users through BLE (Bluetooth Low En
 # About App
 
 The App is developed to further prevent clusters of the coronavirus spread around New Zealand. Through Bluetooth connectivity, users can identify each other through their UUID (Universally Unique Identification) so user information will not be harmed. Currently the App is developed for Android users for now. 
-
-**LINK:** *Coming Soon*
